@@ -1,6 +1,6 @@
 export interface IssueLabelListProps {
-  labels: Array<{
+  labels: {
     id: number;
     name: string;
-  }>;
+  }[];
 }

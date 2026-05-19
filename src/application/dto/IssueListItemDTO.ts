@@ -3,9 +3,9 @@ export interface IssueListItemDTO {
   title: string;
   author: string;
   createdAtRelative: string;
-  labels: Array<{
+  labels: {
     id: number;
     name: string;
     color: string;
-  }>;
+  }[];
 }
