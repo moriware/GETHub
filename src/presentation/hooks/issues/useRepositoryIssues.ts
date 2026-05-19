@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useQueryClientContext } from '@/core/providers/QueryProvider';
-import { container } from '@/infrastructure/di/container';
 import { queryKeys } from '@/infrastructure/cache/queryKeys';
+import { container } from '@/infrastructure/di/container';
 import type { IssuesState } from '@/presentation/hooks/issues/useRepositoryIssues.types';
 import type { IssueItemViewModel } from '@/presentation/view-models/IssueItemViewModel';
 import { INITIAL_PAGE } from '@/shared/constants/pagination';
@@ -37,7 +37,9 @@ export function useRepositoryIssues(owner: string, repo: string) {
         return;
       }
 
-      const mappedItems = result.value.items.map((issue) => container.mappers.issue.toItemViewModel(issue));
+      const mappedItems = result.value.items.map((issue) =>
+        container.mappers.issue.toItemViewModel(issue),
+      );
       const state: IssuesState = { items: mappedItems, hasNextPage: result.value.hasNextPage };
       queryClient.setQueryData(key, state);
 

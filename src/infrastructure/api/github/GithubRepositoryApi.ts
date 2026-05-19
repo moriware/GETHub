@@ -4,14 +4,12 @@ import type {
   GithubRepositoryResponse,
   GithubSearchRepositoriesResponse,
 } from '@/infrastructure/api/github/types';
-import type { HttpClient } from '@/infrastructure/http/types';
+import type { HttpClient } from '@/infrastructure/http/HttpClient.types';
 
 export class GithubRepositoryApi {
   constructor(private readonly httpClient: HttpClient) {}
 
-  searchRepositories(
-    params: SearchRepositoriesParams,
-  ): Promise<GithubSearchRepositoriesResponse> {
+  searchRepositories(params: SearchRepositoriesParams): Promise<GithubSearchRepositoriesResponse> {
     return this.httpClient.request<GithubSearchRepositoriesResponse>({
       endpoint: GithubEndpoints.searchRepositories,
       query: {
@@ -24,10 +22,7 @@ export class GithubRepositoryApi {
     });
   }
 
-  getRepositoryDetails(
-    owner: string,
-    repo: string,
-  ): Promise<GithubRepositoryResponse> {
+  getRepositoryDetails(owner: string, repo: string): Promise<GithubRepositoryResponse> {
     return this.httpClient.request<GithubRepositoryResponse>({
       endpoint: GithubEndpoints.repositoryDetails(owner, repo),
     });

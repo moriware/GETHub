@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 
 import { useQueryClientContext } from '@/core/providers/QueryProvider';
-import { container } from '@/infrastructure/di/container';
 import { queryKeys } from '@/infrastructure/cache/queryKeys';
+import { container } from '@/infrastructure/di/container';
 import type { SearchState } from '@/presentation/hooks/repositories/useSearchRepositories.types';
 import type { RepositoryItemViewModel } from '@/presentation/view-models/RepositoryItemViewModel';
 import { INITIAL_PAGE } from '@/shared/constants/pagination';
@@ -52,7 +52,9 @@ export function useSearchRepositories() {
         return;
       }
 
-      const mappedItems = result.value.items.map((repo) => container.mappers.repository.toItemViewModel(repo));
+      const mappedItems = result.value.items.map((repo) =>
+        container.mappers.repository.toItemViewModel(repo),
+      );
       const state: SearchState = {
         items: mappedItems,
         hasNextPage: result.value.hasNextPage,

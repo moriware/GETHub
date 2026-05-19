@@ -6,17 +6,20 @@ import { SearchRepositoriesUseCase } from '@/application/use-cases/repositories/
 import { GithubIssuesApi } from '@/infrastructure/api/github/GithubIssuesApi';
 import { GithubRepositoryApi } from '@/infrastructure/api/github/GithubRepositoryApi';
 import { queryClient } from '@/infrastructure/cache/queryClient';
+import { GithubHttpClient } from '@/infrastructure/http/GithubHttpClient';
 import { GithubIssueMapper } from '@/infrastructure/mappers/GithubIssueMapper';
 import { GithubRepositoryMapper } from '@/infrastructure/mappers/GithubRepositoryMapper';
 import { GithubIssueRepository } from '@/infrastructure/repositories/GithubIssueRepository';
 import { GithubRepositoryRepository } from '@/infrastructure/repositories/GithubRepositoryRepository';
-import { GithubHttpClient } from '@/infrastructure/http/GithubHttpClient';
 
 const httpClient = new GithubHttpClient();
 const repositoryApi = new GithubRepositoryApi(httpClient);
 const issuesApi = new GithubIssuesApi(httpClient);
 
-const repositoryRepository = new GithubRepositoryRepository(repositoryApi, new GithubRepositoryMapper());
+const repositoryRepository = new GithubRepositoryRepository(
+  repositoryApi,
+  new GithubRepositoryMapper(),
+);
 const issueRepository = new GithubIssueRepository(issuesApi, new GithubIssueMapper());
 
 export const container = {
