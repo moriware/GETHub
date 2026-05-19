@@ -1,16 +1,21 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import React from 'react';
-import { useColorScheme } from 'react-native';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { NavigationThemeProvider } from '@/core/navigation/NavigationThemeProvider';
+import { RootNavigator } from '@/core/navigation/RootNavigator';
+import { QueryProvider } from '@/core/providers/QueryProvider';
+import { SafeAreaProvider } from '@/core/providers/SafeAreaProvider';
+import { ThemeProvider } from '@/core/providers/ThemeProvider';
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function Layout(): React.JSX.Element {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
+    <ThemeProvider>
+      <SafeAreaProvider>
+        <NavigationThemeProvider>
+          <QueryProvider>
+            <RootNavigator />
+          </QueryProvider>
+        </NavigationThemeProvider>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }
