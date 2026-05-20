@@ -1,20 +1,20 @@
-import { IssueToViewModelMapper } from '@/application/mappers/IssueToViewModelMapper';
-import { RepositoryToViewModelMapper } from '@/application/mappers/RepositoryToViewModelMapper';
 import { GetRepositoryIssuesUseCase } from '@/application/use-cases/issues/GetRepositoryIssuesUseCase';
 import { GetRepositoryDetailsUseCase } from '@/application/use-cases/repositories/GetRepositoryDetailsUseCase';
 import { SearchRepositoriesUseCase } from '@/application/use-cases/repositories/SearchRepositoriesUseCase';
 import { GithubIssuesApi } from '@/infrastructure/api/github/GithubIssuesApi';
 import { GithubRepositoryApi } from '@/infrastructure/api/github/GithubRepositoryApi';
-import { queryClient } from '@/infrastructure/cache/queryClient';
-import { GithubHttpClient } from '@/infrastructure/http/GithubHttpClient';
+import { queryClient } from '@/infrastructure/cache/app-query-client/AppQueryClient';
+import { GithubHttpClient } from '@/infrastructure/http/github/GithubHttpClient';
 import { GithubIssueMapper } from '@/infrastructure/mappers/GithubIssueMapper';
 import { GithubRepositoryMapper } from '@/infrastructure/mappers/GithubRepositoryMapper';
 import { GithubIssueRepository } from '@/infrastructure/repositories/GithubIssueRepository';
 import { GithubRepositoryRepository } from '@/infrastructure/repositories/GithubRepositoryRepository';
+import { IssueToViewModelMapper } from '@/presentation/view-models/issues/mappers/IssueToViewModelMapper';
+import { RepositoryToViewModelMapper } from '@/presentation/view-models/repositories/mappers/RepositoryToViewModelMapper';
 
-const httpClient = new GithubHttpClient();
-const repositoryApi = new GithubRepositoryApi(httpClient);
-const issuesApi = new GithubIssuesApi(httpClient);
+const githubHttpClient = new GithubHttpClient();
+const repositoryApi = new GithubRepositoryApi(githubHttpClient);
+const issuesApi = new GithubIssuesApi(githubHttpClient);
 
 const repositoryRepository = new GithubRepositoryRepository(
   repositoryApi,
