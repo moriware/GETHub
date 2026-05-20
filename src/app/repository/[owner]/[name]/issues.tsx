@@ -7,5 +7,10 @@ import { RepositoryIssuesScreen } from '@/presentation/screens/RepositoryIssuesS
 export default function RepositoryIssuesRoute(): React.JSX.Element {
   const params = useLocalSearchParams<{ owner?: string | string[]; name?: string | string[] }>();
 
-  return <RepositoryIssuesScreen owner={pickRouteParam(params.owner)} repo={pickRouteParam(params.name)} />;
+  return (
+    <RepositoryIssuesScreen
+      owner={pickRouteParam(params.owner)}
+      repo={pickRouteParam(params.name)}
+    />
+  );
 }

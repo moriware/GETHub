@@ -1,4 +1,9 @@
-import type { PressableProps, PressableStateCallbackType, StyleProp, ViewStyle } from 'react-native';
+import type {
+  PressableProps,
+  PressableStateCallbackType,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 
 /**
  * Resolve o estilo opcional informado no componente genérico de Pressable.

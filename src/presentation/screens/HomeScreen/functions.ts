@@ -3,7 +3,10 @@ import { router } from 'expo-router';
 /**
  * Executa a busca de repositórios com o termo informado.
  */
-export async function runSearch(search: (query: string) => Promise<void>, input: string): Promise<void> {
+export async function runSearch(
+  search: (query: string) => Promise<void>,
+  input: string,
+): Promise<void> {
   await search(input);
 }
 
@@ -28,7 +31,10 @@ export async function runRefresh(refresh: () => Promise<void>): Promise<void> {
 /**
  * Carrega a próxima página quando houver paginação disponível.
  */
-export async function runLoadMore(loadMore: () => Promise<void>, hasNextPage: boolean): Promise<void> {
+export async function runLoadMore(
+  loadMore: () => Promise<void>,
+  hasNextPage: boolean,
+): Promise<void> {
   if (!hasNextPage) {
     return;
   }
