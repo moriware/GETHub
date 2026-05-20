@@ -1,49 +1,40 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback } from 'react';
 
-import { useQueryClientContext } from '@/core/providers/query/QueryProvider';
 import { queryKeys } from '@/infrastructure/cache/app-query-client/AppQueryClient.constants';
-import { container } from '@/infrastructure/di/container';
-import type { RepositoryDetailsViewModel } from '@/presentation/view-models/repositories/RepositoryDetailsViewModel';
+import { resolveQueryErrorMessage } from '@/presentation/hooks/query/queryError.functions';
+import {
+  canLoadRepositoryDetails,
+  fetchRepositoryDetails,
+} from '@/presentation/hooks/repositories/useRepositoryDetails.functions';
+import type { UseRepositoryDetailsResult } from '@/presentation/hooks/repositories/useRepositoryDetails.types';
 
-export function useRepositoryDetails(owner: string, repo: string) {
-  const { queryClient } = useQueryClientContext();
-  const [repository, setRepository] = useState<RepositoryDetailsViewModel | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export function useRepositoryDetails(owner: string, repo: string): UseRepositoryDetailsResult {
+  const enabled = canLoadRepositoryDetails(owner, repo);
 
-  const load = useCallback(async () => {
-    const key = queryKeys.repositories.details(owner, repo);
-    const cached = queryClient.getQueryData<RepositoryDetailsViewModel>(key);
+  const {
+    data,
+    error: queryError,
+    isPending,
+    refetch,
+  } = useQuery({
+    queryKey: queryKeys.repositories.details(owner, repo),
+    queryFn: () => fetchRepositoryDetails(owner, repo),
+    enabled,
+  });
 
-    if (cached) {
-      setRepository(cached);
-      setError(null);
+  const load = useCallback(async (): Promise<void> => {
+    if (!enabled) {
       return;
     }
 
-    setLoading(true);
-    const result = await container.useCases.getRepositoryDetails.execute(owner, repo);
-    setLoading(false);
-
-    if (!result.ok) {
-      setError(result.error.message);
-      return;
-    }
-
-    const viewModel = container.mappers.repository.toDetailsViewModel(result.value);
-    queryClient.setQueryData(key, viewModel);
-    setRepository(viewModel);
-    setError(null);
-  }, [owner, queryClient, repo]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
+    await refetch({ throwOnError: false });
+  }, [enabled, refetch]);
 
   return {
-    repository,
-    loading,
-    error,
+    repository: data ?? null,
+    loading: enabled && isPending,
+    error: enabled ? resolveQueryErrorMessage(queryError) : null,
     refetch: load,
   };
 }
