@@ -5,6 +5,5 @@ export function createScreenStyle(theme: AppTheme) {
     flex: 1,
     backgroundColor: theme.colors.background,
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
   };
 }
