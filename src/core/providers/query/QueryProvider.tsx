@@ -1,28 +1,29 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import { AppState } from 'react-native';
 
-import { createQueryContextValue } from '@/core/providers/query/QueryProvider.functions';
-import type {
-  QueryContextValue,
-  QueryProviderProps,
-} from '@/core/providers/query/QueryProvider.types';
+import { shouldPersistQueryCache } from '@/core/providers/query/QueryProvider.functions';
+import type { QueryProviderProps } from '@/core/providers/query/QueryProvider.types';
 import {
   persistQueryClient,
   restorePersistedQueryClient,
+  setupQueryFocusManager,
+  setupQueryOnlineManager,
 } from '@/infrastructure/cache/app-query-client/AppQueryClient.functions';
-
-const QueryContext = createContext<QueryContextValue | null>(null);
+import { queryClient } from '@/infrastructure/cache/app-query-client/AppQueryClient';
 
 export function QueryProvider({ children }: QueryProviderProps): React.JSX.Element {
-  const value = useMemo<QueryContextValue>(() => createQueryContextValue(), []);
   const [isHydrated, setIsHydrated] = useState(false);
 
   React.useEffect(() => {
+    setupQueryOnlineManager();
+    const removeFocusListener = setupQueryFocusManager();
+
     let isMounted = true;
 
     const hydrateCache = async () => {
       try {
-        await restorePersistedQueryClient();
+        await restorePersistedQueryClient(queryClient);
       } finally {
         if (isMounted) {
           setIsHydrated(true);
@@ -34,17 +35,18 @@ export function QueryProvider({ children }: QueryProviderProps): React.JSX.Eleme
 
     return () => {
       isMounted = false;
-      void persistQueryClient();
+      removeFocusListener();
+      void persistQueryClient(queryClient);
     };
   }, []);
 
   React.useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextState) => {
-      if (nextState === 'active') {
+      if (!shouldPersistQueryCache(nextState)) {
         return;
       }
 
-      void persistQueryClient();
+      void persistQueryClient(queryClient);
     });
 
     return () => {
@@ -56,15 +58,5 @@ export function QueryProvider({ children }: QueryProviderProps): React.JSX.Eleme
     return <></>;
   }
 
-  return <QueryContext.Provider value={value}>{children}</QueryContext.Provider>;
-}
-
-export function useQueryClientContext(): QueryContextValue {
-  const context = useContext(QueryContext);
-
-  if (!context) {
-    throw new Error('useQueryClientContext must be used inside QueryProvider.');
-  }
-
-  return context;
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

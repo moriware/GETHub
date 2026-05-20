@@ -1,7 +1,5 @@
-import { container } from '@/infrastructure/di/container';
+import type { AppStateStatus } from 'react-native';
 
-import type { QueryContextValue } from '@/core/providers/query/QueryProvider.types';
-
-export function createQueryContextValue(): QueryContextValue {
-  return { queryClient: container.queryClient };
+export function shouldPersistQueryCache(nextState: AppStateStatus): boolean {
+  return nextState !== 'active';
 }
