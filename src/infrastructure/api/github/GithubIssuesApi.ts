@@ -1,6 +1,6 @@
 import { GithubEndpoints } from '@/infrastructure/api/github/endpoints';
 import type { GithubIssueResponse } from '@/infrastructure/api/github/types';
-import type { HttpClient } from '@/infrastructure/http/HttpClient.types';
+import type { HttpClient } from '@/infrastructure/http/client/HttpClient.types';
 
 export class GithubIssuesApi {
   constructor(private readonly httpClient: HttpClient) {}
