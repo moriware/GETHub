@@ -2,15 +2,39 @@ import type { RelativeUnit } from '@/application/services/DateFormatterService.t
 
 export function formatRelativeFallback(value: number, unit: RelativeUnit): string {
   const absolute = Math.abs(value);
-  const pluralizedUnit = absolute === 1 ? unit : `${unit}s`;
+  const pluralizedUnit = resolveRelativeUnitPt(absolute, unit);
 
   if (value < 0) {
-    return `${absolute} ${pluralizedUnit} ago`;
+    return `há ${absolute} ${pluralizedUnit}`;
   }
 
   if (value > 0) {
-    return `in ${absolute} ${pluralizedUnit}`;
+    return `em ${absolute} ${pluralizedUnit}`;
   }
 
-  return `0 ${pluralizedUnit}`;
+  return 'agora';
+}
+
+function resolveRelativeUnitPt(value: number, unit: RelativeUnit): string {
+  if (unit === 'month') {
+    return value === 1 ? 'mês' : 'meses';
+  }
+
+  if (unit === 'second') {
+    return value === 1 ? 'segundo' : 'segundos';
+  }
+
+  if (unit === 'minute') {
+    return value === 1 ? 'minuto' : 'minutos';
+  }
+
+  if (unit === 'hour') {
+    return value === 1 ? 'hora' : 'horas';
+  }
+
+  if (unit === 'day') {
+    return value === 1 ? 'dia' : 'dias';
+  }
+
+  return value === 1 ? 'ano' : 'anos';
 }
