@@ -16,7 +16,9 @@ export class GetRepositoryIssuesUseCase {
     perPage?: number,
   ): Promise<Result<PaginatedResult<Issue>, DomainError>> {
     if (!owner.trim() || !repo.trim()) {
-      return failure(new DomainError('INVALID_REPOSITORY_ID', 'Owner and repo are required.'));
+      return failure(
+        new DomainError('INVALID_REPOSITORY_ID', 'Dono e repositório são obrigatórios.'),
+      );
     }
 
     try {
@@ -24,7 +26,7 @@ export class GetRepositoryIssuesUseCase {
       const issues = await this.issueRepository.getRepositoryIssues(owner, repo, pagination);
       return success(issues);
     } catch {
-      return failure(new DomainError('ISSUES_FAILED', 'Failed to load repository issues.'));
+      return failure(new DomainError('ISSUES_FAILED', 'Falha ao carregar issues do repositório.'));
     }
   }
 }

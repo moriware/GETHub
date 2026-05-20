@@ -1,8 +1,8 @@
 export const MESSAGES = {
-  searchPlaceholder: 'Search repositories (react native, typescript...)',
-  emptySearch: 'Type a term to search repositories.',
-  emptyResults: 'No repositories found for this term.',
-  genericError: 'Something went wrong. Please try again.',
-  rateLimitError: 'GitHub rate limit exceeded. Try again later.',
-  networkError: 'No connection. Check your internet and try again.',
+  searchPlaceholder: 'Buscar repositórios (react native, typescript...)',
+  emptySearch: 'Digite um termo para buscar repositórios.',
+  emptyResults: 'Nenhum repositório encontrado para este termo.',
+  genericError: 'Algo deu errado. Por favor, tente novamente.',
+  rateLimitError: 'Limite de taxa do GitHub excedido. Tente novamente mais tarde.',
+  networkError: 'Sem conexão. Verifique sua internet e tente novamente.',
 } as const;

@@ -34,7 +34,7 @@ export function HomeScreen(): React.JSX.Element {
     <Screen style={styles.container}>
       <AppView style={styles.searchForm}>
         <Input
-          label="Search"
+          label="Buscar"
           placeholder={MESSAGES.searchPlaceholder}
           value={input}
           onChangeText={setInput}
@@ -46,7 +46,7 @@ export function HomeScreen(): React.JSX.Element {
           }}
         />
         <Button
-          label="Search repositories"
+          label="Buscar repositórios"
           onPress={() => {
             void runSearch(search, input);
           }}

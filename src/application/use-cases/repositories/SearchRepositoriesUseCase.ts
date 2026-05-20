@@ -15,7 +15,7 @@ export class SearchRepositoriesUseCase {
     const query = params.query.trim();
 
     if (!query) {
-      return failure(new DomainError('EMPTY_QUERY', 'Search query is required.'));
+      return failure(new DomainError('EMPTY_QUERY', 'Busca não pode ser vazia.'));
     }
 
     try {
@@ -24,7 +24,7 @@ export class SearchRepositoriesUseCase {
 
       return success(result);
     } catch {
-      return failure(new DomainError('SEARCH_FAILED', 'Failed to search repositories.'));
+      return failure(new DomainError('SEARCH_FAILED', 'Falha ao pesquisar repositórios.'));
     }
   }
 }

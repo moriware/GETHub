@@ -9,14 +9,18 @@ export class GetRepositoryDetailsUseCase {
 
   async execute(owner: string, repo: string): Promise<Result<Repository, DomainError>> {
     if (!owner.trim() || !repo.trim()) {
-      return failure(new DomainError('INVALID_REPOSITORY_ID', 'Owner and repo are required.'));
+      return failure(
+        new DomainError('INVALID_REPOSITORY_ID', 'Dono e repositório são obrigatórios.'),
+      );
     }
 
     try {
       const repository = await this.repositoryRepository.getRepositoryDetails(owner, repo);
       return success(repository);
     } catch {
-      return failure(new DomainError('DETAILS_FAILED', 'Failed to load repository details.'));
+      return failure(
+        new DomainError('DETAILS_FAILED', 'Falha ao carregar detalhes do repositório.'),
+      );
     }
   }
 }

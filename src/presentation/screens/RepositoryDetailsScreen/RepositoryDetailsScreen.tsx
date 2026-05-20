@@ -43,7 +43,7 @@ export function RepositoryDetailsScreen({
   if (!repository) {
     return (
       <Screen style={styles.container}>
-        <EmptyState message="Repository not found." />
+        <EmptyState message="Repositório não encontrado." />
       </Screen>
     );
   }
@@ -66,10 +66,10 @@ export function RepositoryDetailsScreen({
             <Text>👀 {repository.watchersLabel}</Text>
           </AppView>
 
-          <Text tone="muted">Language: {repository.language ?? 'Unknown'}</Text>
+          <Text tone="muted">Linguagem: {repository.language ?? 'Unknown'}</Text>
 
           <Button
-            label="View open issues"
+            label="Ver issues abertas"
             onPress={() => navigateToRepositoryIssues(owner, repo)}
           />
         </AppView>

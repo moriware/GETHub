@@ -41,7 +41,7 @@ export function RepositoryIssuesScreen({
   if (!loading && items.length === 0) {
     return (
       <Screen style={styles.container}>
-        <EmptyState message="No open issues found." />
+        <EmptyState message="Nenhuma issue encontrada." />
       </Screen>
     );
   }

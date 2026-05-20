@@ -20,39 +20,39 @@ export function DesignSystemScreen(): React.JSX.Element {
   return (
     <Screen style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Heading>Design System Showcase</Heading>
-        <Text tone="muted">Current theme: {mode}</Text>
+        <Heading>Design System</Heading>
+        <Text tone="muted">Tema atual: {mode}</Text>
 
-        <Button label="Toggle theme" variant="outline" onPress={toggleMode} />
+        <Button label="Alternar tema" variant="outline" onPress={toggleMode} />
 
         <Card>
           <AppView style={styles.content}>
-            <Text variant="title">Buttons</Text>
+            <Text variant="title">Botões</Text>
             <AppView style={styles.row}>
-              <Button label="Primary" />
-              <Button label="Outline" variant="outline" />
-              <Button label="Ghost" variant="ghost" />
-              <Button label="Loading" loading />
-              <Button label="Disabled" disabled />
+              <Button label="Primário" />
+              <Button label="Contorno" variant="outline" />
+              <Button label="Fantasma" variant="ghost" />
+              <Button label="Carregando" loading />
+              <Button label="Desativado" disabled />
             </AppView>
           </AppView>
         </Card>
 
         <Card>
           <AppView style={styles.content}>
-            <Text variant="title">Input</Text>
-            <Input label="Repository" placeholder="react native" helperText="Search by name" />
-            <Input label="With error" value="" error="Required field" />
+            <Text variant="title">Entrada</Text>
+            <Input label="Repositório" placeholder="react native" helperText="Buscar por nome" />
+            <Input label="Com erro" value="" error="Campo obrigatório" />
           </AppView>
         </Card>
 
         <Card>
           <AppView style={styles.content}>
-            <Text variant="title">Badges & Avatar</Text>
+            <Text variant="title">Badges e Avatar</Text>
             <AppView style={styles.row}>
               <Badge label="bug" />
-              <Badge label="enhancement" />
-              <Badge label="help wanted" />
+              <Badge label="melhoria" />
+              <Badge label="precisa de ajuda" />
             </AppView>
             <AppView style={styles.row}>
               <Avatar
