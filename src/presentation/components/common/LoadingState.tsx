@@ -1,12 +1,12 @@
 import React from 'react';
 import { ActivityIndicator } from 'react-native';
 
-import { AppView } from '@/design-system/components/primitives';
-import { useTheme } from '@/design-system/theme/useTheme';
 import { createLoadingStateContainerStyle } from '@/presentation/components/common/LoadingState.styles';
+import { AppView } from '@/presentation/components/primitives';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 
 export function LoadingState(): React.JSX.Element {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <AppView style={createLoadingStateContainerStyle(theme)}>
