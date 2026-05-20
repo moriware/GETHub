@@ -1,4 +1,4 @@
-import type { Result } from '@/domain/types/Result.types';
+import type { Result } from '@/domain/value-objects/result/Result.types';
 
 /**
  * Retorna um resultado de sucesso da camada de domínio.
