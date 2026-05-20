@@ -1,12 +1,7 @@
+import { KeyValueStorage } from '@/infrastructure/storage/Storage.types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export interface KeyValueStorage {
-  getString(key: string): Promise<string | null>;
-  set(key: string, value: string): Promise<void>;
-  delete(key: string): Promise<void>;
-}
-
-export class MMKVStorage implements KeyValueStorage {
+export class Storage implements KeyValueStorage {
   /**
    * Recupera um valor persistido em disco para a chave informada.
    */
