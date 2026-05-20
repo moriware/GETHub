@@ -1,9 +1,9 @@
-import { DomainError } from '@/domain/errors/DomainError';
+import type { IIssueRepository } from '@/domain/contracts/IIssueRepository';
 import type { Issue } from '@/domain/entities/Issue';
-import type { IIssueRepository } from '@/domain/repositories/IIssueRepository';
-import type { Result } from '@/domain/types/Result';
-import { failure, success } from '@/domain/types/Result';
-import { createPagination } from '@/domain/value-objects/Pagination';
+import { DomainError } from '@/domain/errors/DomainError';
+import { createPagination } from '@/domain/value-objects/pagination/Pagination';
+import type { Result } from '@/domain/value-objects/result/Result';
+import { failure, success } from '@/domain/value-objects/result/Result';
 import type { PaginatedResult } from '@/shared/types/api';
 
 export class GetRepositoryIssuesUseCase {

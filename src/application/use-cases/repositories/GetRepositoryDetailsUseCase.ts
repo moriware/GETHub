@@ -1,8 +1,8 @@
+import type { IRepositoryRepository } from '@/domain/contracts/IRepositoryRepository';
 import type { Repository } from '@/domain/entities/Repository';
 import { DomainError } from '@/domain/errors/DomainError';
-import type { IRepositoryRepository } from '@/domain/repositories/IRepositoryRepository';
-import type { Result } from '@/domain/types/Result';
-import { failure, success } from '@/domain/types/Result';
+import type { Result } from '@/domain/value-objects/result/Result';
+import { failure, success } from '@/domain/value-objects/result/Result';
 
 export class GetRepositoryDetailsUseCase {
   constructor(private readonly repositoryRepository: IRepositoryRepository) {}
