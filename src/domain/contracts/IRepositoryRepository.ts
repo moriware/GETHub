@@ -1,5 +1,5 @@
 import type { Repository } from '@/domain/entities/Repository';
-import type { Pagination } from '@/domain/value-objects/Pagination';
+import type { Pagination } from '@/domain/value-objects/pagination/Pagination';
 import type { PaginatedResult } from '@/shared/types/api';
 
 export interface IRepositoryRepository {
