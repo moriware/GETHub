@@ -24,7 +24,11 @@ export class GithubIssueMapper {
     };
   }
 
-  toPaginatedDomain(items: GithubIssueResponse[], page: number, perPage: number): PaginatedResult<Issue> {
+  toPaginatedDomain(
+    items: GithubIssueResponse[],
+    page: number,
+    perPage: number,
+  ): PaginatedResult<Issue> {
     return {
       items: items.map((item) => this.toDomain(item)),
       page,
