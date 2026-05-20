@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-import { Button } from '@/design-system/components/Button/Button';
-import { AppFlatList, AppView } from '@/design-system/components/primitives';
-import { Input } from '@/design-system/components/Input/Input';
-import { useTheme } from '@/design-system/theme/useTheme';
+import { Button } from '@/presentation/components/button/Button';
 import { EmptyState } from '@/presentation/components/common/EmptyState';
 import { ErrorState } from '@/presentation/components/common/ErrorState';
 import { LoadingState } from '@/presentation/components/common/LoadingState';
 import { Screen } from '@/presentation/components/common/Screen';
+import { Input } from '@/presentation/components/input/Input';
+import { AppFlatList, AppView } from '@/presentation/components/primitives';
 import { RepositoryCard } from '@/presentation/components/repository/RepositoryCard';
 import { useSearchRepositories } from '@/presentation/hooks/repositories/useSearchRepositories';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 import {
   navigateToRepositoryDetails,
   runLoadMore,
@@ -22,7 +22,7 @@ import { MESSAGES } from '@/shared/constants/messages';
 import { UI_THRESHOLDS } from '@/shared/constants/ui';
 
 export function HomeScreen(): React.JSX.Element {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const styles = createHomeScreenStyles(theme);
   const [input, setInput] = useState('');
   const { items, query, loading, refreshing, error, hasNextPage, search, loadMore, refresh } =
@@ -83,7 +83,10 @@ export function HomeScreen(): React.JSX.Element {
             void runLoadMore(loadMore, hasNextPage);
           }}
           renderItem={({ item }) => (
-            <RepositoryCard repository={item} onPress={() => navigateToRepositoryDetails(item.fullName)} />
+            <RepositoryCard
+              repository={item}
+              onPress={() => navigateToRepositoryDetails(item.fullName)}
+            />
           )}
         />
       ) : null}

@@ -1,21 +1,27 @@
 import React from 'react';
 
-import { AppFlatList } from '@/design-system/components/primitives';
-import { useTheme } from '@/design-system/theme/useTheme';
 import { EmptyState } from '@/presentation/components/common/EmptyState';
 import { ErrorState } from '@/presentation/components/common/ErrorState';
 import { LoadingState } from '@/presentation/components/common/LoadingState';
 import { Screen } from '@/presentation/components/common/Screen';
 import { IssueCard } from '@/presentation/components/issue/IssueCard';
+import { AppFlatList } from '@/presentation/components/primitives';
 import { useRepositoryIssues } from '@/presentation/hooks/issues/useRepositoryIssues';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 import { createRepositoryIssuesScreenStyles } from '@/presentation/screens/RepositoryIssuesScreen/styles';
 import type { RepositoryIssuesScreenProps } from '@/presentation/screens/RepositoryIssuesScreen/types';
 import { UI_THRESHOLDS } from '@/shared/constants/ui';
 
-export function RepositoryIssuesScreen({ owner, repo }: RepositoryIssuesScreenProps): React.JSX.Element {
-  const theme = useTheme();
+export function RepositoryIssuesScreen({
+  owner,
+  repo,
+}: RepositoryIssuesScreenProps): React.JSX.Element {
+  const { theme } = useTheme();
   const styles = createRepositoryIssuesScreenStyles(theme);
-  const { items, loading, error, hasNextPage, loadMore, refetch } = useRepositoryIssues(owner, repo);
+  const { items, loading, error, hasNextPage, loadMore, refetch } = useRepositoryIssues(
+    owner,
+    repo,
+  );
 
   if (loading && items.length === 0) {
     return <LoadingState />;

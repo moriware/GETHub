@@ -1,23 +1,21 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 
-import { Avatar } from '@/design-system/components/Avatar/Avatar';
-import { Badge } from '@/design-system/components/Badge/Badge';
-import { Button } from '@/design-system/components/Button/Button';
-import { Card } from '@/design-system/components/Card/Card';
-import { Heading } from '@/design-system/components/Heading/Heading';
-import { Input } from '@/design-system/components/Input/Input';
-import { AppView } from '@/design-system/components/primitives';
-import { Text } from '@/design-system/components/Text/Text';
-import { useTheme } from '@/design-system/theme/useTheme';
+import { Avatar } from '@/presentation/components/avatar/Avatar';
+import { Badge } from '@/presentation/components/badge/Badge';
+import { Button } from '@/presentation/components/button/Button';
+import { Card } from '@/presentation/components/card/Card';
 import { Screen } from '@/presentation/components/common/Screen';
-import { useAppTheme } from '@/presentation/hooks/theme/useAppTheme';
+import { Heading } from '@/presentation/components/heading/Heading';
+import { Input } from '@/presentation/components/input/Input';
+import { AppView } from '@/presentation/components/primitives';
+import { Text } from '@/presentation/components/text/Text';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 import { createDesignSystemScreenStyles } from '@/presentation/screens/DesignSystemScreen/styles';
 
 export function DesignSystemScreen(): React.JSX.Element {
-  const theme = useTheme();
+  const { mode, toggleMode, theme } = useTheme();
   const styles = createDesignSystemScreenStyles(theme);
-  const { mode, toggleMode } = useAppTheme();
 
   return (
     <Screen style={styles.container}>
@@ -57,9 +55,18 @@ export function DesignSystemScreen(): React.JSX.Element {
               <Badge label="help wanted" />
             </AppView>
             <AppView style={styles.row}>
-              <Avatar size="sm" uri="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
-              <Avatar size="md" uri="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
-              <Avatar size="lg" uri="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
+              <Avatar
+                size="sm"
+                uri="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+              />
+              <Avatar
+                size="md"
+                uri="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+              />
+              <Avatar
+                size="lg"
+                uri="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+              />
             </AppView>
           </AppView>
         </Card>

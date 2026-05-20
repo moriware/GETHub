@@ -1,22 +1,25 @@
 import React from 'react';
 
-import { Avatar } from '@/design-system/components/Avatar/Avatar';
-import { Button } from '@/design-system/components/Button/Button';
-import { Card } from '@/design-system/components/Card/Card';
-import { AppView } from '@/design-system/components/primitives';
-import { Text } from '@/design-system/components/Text/Text';
-import { useTheme } from '@/design-system/theme/useTheme';
+import { Avatar } from '@/presentation/components/avatar/Avatar';
+import { Button } from '@/presentation/components/button/Button';
+import { Card } from '@/presentation/components/card/Card';
 import { EmptyState } from '@/presentation/components/common/EmptyState';
 import { ErrorState } from '@/presentation/components/common/ErrorState';
 import { LoadingState } from '@/presentation/components/common/LoadingState';
 import { Screen } from '@/presentation/components/common/Screen';
+import { AppView } from '@/presentation/components/primitives';
+import { Text } from '@/presentation/components/text/Text';
 import { useRepositoryDetails } from '@/presentation/hooks/repositories/useRepositoryDetails';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 import { navigateToRepositoryIssues } from '@/presentation/screens/RepositoryDetailsScreen/functions';
 import { createRepositoryDetailsScreenStyles } from '@/presentation/screens/RepositoryDetailsScreen/styles';
 import type { RepositoryDetailsScreenProps } from '@/presentation/screens/RepositoryDetailsScreen/types';
 
-export function RepositoryDetailsScreen({ owner, repo }: RepositoryDetailsScreenProps): React.JSX.Element {
-  const theme = useTheme();
+export function RepositoryDetailsScreen({
+  owner,
+  repo,
+}: RepositoryDetailsScreenProps): React.JSX.Element {
+  const { theme } = useTheme();
   const styles = createRepositoryDetailsScreenStyles(theme);
   const { repository, loading, error, refetch } = useRepositoryDetails(owner, repo);
 
@@ -65,7 +68,10 @@ export function RepositoryDetailsScreen({ owner, repo }: RepositoryDetailsScreen
 
           <Text tone="muted">Language: {repository.language ?? 'Unknown'}</Text>
 
-          <Button label="View open issues" onPress={() => navigateToRepositoryIssues(owner, repo)} />
+          <Button
+            label="View open issues"
+            onPress={() => navigateToRepositoryIssues(owner, repo)}
+          />
         </AppView>
       </Card>
     </Screen>
