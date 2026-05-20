@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { Card } from '@/design-system/components/Card/Card';
-import { AppView } from '@/design-system/components/primitives';
-import { Text } from '@/design-system/components/Text/Text';
-import { useTheme } from '@/design-system/theme/useTheme';
-import { IssueLabelList } from '@/presentation/components/issue/IssueLabelList';
+import { Card } from '@/presentation/components/card/Card';
 import { createIssueCardContentStyle } from '@/presentation/components/issue/IssueCard.styles';
 import type { IssueCardProps } from '@/presentation/components/issue/IssueCard.types';
+import { IssueLabelList } from '@/presentation/components/issue/IssueLabelList';
+import { AppView } from '@/presentation/components/primitives';
+import { Text } from '@/presentation/components/text/Text';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 
 export function IssueCard({ issue }: IssueCardProps): React.JSX.Element {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <Card>

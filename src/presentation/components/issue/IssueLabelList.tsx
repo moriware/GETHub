@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { Badge } from '@/design-system/components/Badge/Badge';
-import { AppView } from '@/design-system/components/primitives';
-import { useTheme } from '@/design-system/theme/useTheme';
+import { Badge } from '@/presentation/components/badge/Badge';
 import { createIssueLabelListContainerStyle } from '@/presentation/components/issue/IssueLabelList.styles';
 import type { IssueLabelListProps } from '@/presentation/components/issue/IssueLabelList.types';
+import { AppView } from '@/presentation/components/primitives';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 
 export function IssueLabelList({ labels }: IssueLabelListProps): React.JSX.Element {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <AppView style={createIssueLabelListContainerStyle(theme)}>
