@@ -1,95 +1,84 @@
-import { useCallback, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useCallback, useMemo, useState } from 'react';
 
-import { useQueryClientContext } from '@/core/providers/query/QueryProvider';
 import { queryKeys } from '@/infrastructure/cache/app-query-client/AppQueryClient.constants';
-import { container } from '@/infrastructure/di/container';
-import type { SearchState } from '@/presentation/hooks/repositories/useSearchRepositories.types';
-import type { RepositoryItemViewModel } from '@/presentation/view-models/repositories/RepositoryItemViewModel';
+import {
+  fetchSearchRepositoriesPage,
+  flattenSearchPages,
+  normalizeSearchQuery,
+  resolveNextSearchPage,
+} from '@/presentation/hooks/repositories/useSearchRepositories.functions';
+import { resolveQueryErrorMessage } from '@/presentation/hooks/query/queryError.functions';
+import type { UseSearchRepositoriesResult } from '@/presentation/hooks/repositories/useSearchRepositories.types';
 import { INITIAL_PAGE } from '@/shared/constants/pagination';
 
-export function useSearchRepositories() {
-  const { queryClient } = useQueryClientContext();
+export function useSearchRepositories(): UseSearchRepositoriesResult {
   const [query, setQuery] = useState('');
-  const [items, setItems] = useState<RepositoryItemViewModel[]>([]);
-  const [page, setPage] = useState(INITIAL_PAGE);
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const normalizedQuery = normalizeSearchQuery(query);
+  const hasQuery = normalizedQuery.length > 0;
 
-  const fetchPage = useCallback(
-    async (nextQuery: string, nextPage: number, append: boolean) => {
-      const trimmed = nextQuery.trim();
-
-      if (!trimmed) {
-        setItems([]);
-        setError(null);
-        setHasNextPage(false);
-        setPage(INITIAL_PAGE);
-        return;
-      }
-
-      const cacheKey = queryKeys.repositories.search(`${trimmed}:${nextPage}`);
-      const cached = queryClient.getQueryData<SearchState>(cacheKey);
-
-      if (cached) {
-        setItems((prev) => (append ? [...prev, ...cached.items] : cached.items));
-        setHasNextPage(cached.hasNextPage);
-        setPage(nextPage);
-        setError(null);
-        return;
-      }
-
-      setLoading(true);
-      const result = await container.useCases.searchRepositories.execute({
-        query: trimmed,
-        page: nextPage,
-      });
-      setLoading(false);
-
-      if (!result.ok) {
-        setError(result.error.message);
-        return;
-      }
-
-      const mappedItems = result.value.items.map((repo) =>
-        container.mappers.repository.toItemViewModel(repo),
-      );
-      const state: SearchState = {
-        items: mappedItems,
-        hasNextPage: result.value.hasNextPage,
-      };
-
-      queryClient.setQueryData(cacheKey, state);
-      setItems((prev) => (append ? [...prev, ...mappedItems] : mappedItems));
-      setHasNextPage(result.value.hasNextPage);
-      setPage(nextPage);
-      setError(null);
+  const {
+    data,
+    error: queryError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isPending,
+    isRefetching,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: queryKeys.repositories.search(normalizedQuery),
+    queryFn: async ({ pageParam }) => {
+      const page = typeof pageParam === 'number' ? pageParam : INITIAL_PAGE;
+      return fetchSearchRepositoriesPage(normalizedQuery, page);
     },
-    [queryClient],
-  );
+    initialPageParam: INITIAL_PAGE,
+    getNextPageParam: resolveNextSearchPage,
+    enabled: hasQuery,
+  });
+
+  const items = useMemo(() => flattenSearchPages(data?.pages), [data?.pages]);
+  const loading = hasQuery && (isPending || isFetchingNextPage || isRefetching);
+  const error = hasQuery ? resolveQueryErrorMessage(queryError) : null;
 
   const search = useCallback(
     async (nextQuery: string) => {
-      setQuery(nextQuery);
-      await fetchPage(nextQuery, INITIAL_PAGE, false);
+      const nextNormalizedQuery = normalizeSearchQuery(nextQuery);
+
+      if (nextNormalizedQuery === normalizedQuery) {
+        if (nextNormalizedQuery.length > 0) {
+          await refetch({ throwOnError: false });
+        }
+
+        return;
+      }
+
+      setQuery(nextNormalizedQuery);
     },
-    [fetchPage],
+    [normalizedQuery, refetch],
   );
 
   const loadMore = useCallback(async () => {
-    if (loading || !hasNextPage) {
+    if (!hasNextPage || isFetchingNextPage) {
       return;
     }
 
-    await fetchPage(query, page + 1, true);
-  }, [fetchPage, hasNextPage, loading, page, query]);
+    await fetchNextPage();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const refresh = useCallback(async () => {
+    if (!hasQuery) {
+      return;
+    }
+
     setRefreshing(true);
-    await fetchPage(query, INITIAL_PAGE, false);
-    setRefreshing(false);
-  }, [fetchPage, query]);
+    try {
+      await refetch({ throwOnError: false });
+    } finally {
+      setRefreshing(false);
+    }
+  }, [hasQuery, refetch]);
 
   return {
     query,
@@ -97,7 +86,7 @@ export function useSearchRepositories() {
     loading,
     refreshing,
     error,
-    hasNextPage,
+    hasNextPage: Boolean(hasNextPage),
     search,
     loadMore,
     refresh,
