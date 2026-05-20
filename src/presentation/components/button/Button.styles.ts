@@ -16,7 +16,11 @@ export function createButtonBaseStyle(theme: AppTheme, isDisabled: boolean, pres
   };
 }
 
-export function createButtonVariantStyle(theme: AppTheme, variant: ButtonVariant) {
+export function createButtonVariantStyle(
+  theme: AppTheme,
+  variant: ButtonVariant,
+  pressed: boolean,
+) {
   if (variant === 'primary') {
     return {
       backgroundColor: theme.colors.primary,
@@ -26,14 +30,14 @@ export function createButtonVariantStyle(theme: AppTheme, variant: ButtonVariant
 
   if (variant === 'outline') {
     return {
-      backgroundColor: 'transparent',
+      backgroundColor: pressed ? theme.colors.headerBackground : 'transparent',
       borderWidth: theme.borders.width.thin,
-      borderColor: theme.colors.border,
+      borderColor: pressed ? theme.colors.primary : theme.colors.border,
     };
   }
 
   return {
-    backgroundColor: 'transparent',
+    backgroundColor: pressed ? theme.colors.headerBackground : 'transparent',
     borderWidth: theme.borders.width.none,
   };
 }

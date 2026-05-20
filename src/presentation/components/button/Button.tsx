@@ -33,7 +33,7 @@ export function Button({
       style={({ pressed }) => [
         createButtonBaseStyle(theme, isDisabled, pressed),
         resolveButtonSizeStyle(theme, size),
-        createButtonVariantStyle(theme, variant),
+        createButtonVariantStyle(theme, variant, pressed),
       ]}>
       {loading ? (
         <ActivityIndicator color={resolveButtonLoaderColor(variant, theme.colors)} />
