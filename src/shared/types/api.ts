@@ -5,9 +5,3 @@ export interface PaginatedResult<T> {
   totalCount?: number;
   hasNextPage: boolean;
 }
-
-export interface ApiErrorPayload {
-  status: number;
-  message: string;
-  details?: unknown;
-}
