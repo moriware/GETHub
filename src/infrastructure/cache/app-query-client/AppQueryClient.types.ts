@@ -1,5 +1,6 @@
-export type QueryKey = readonly unknown[];
+import type { DehydratedState } from '@tanstack/react-query';
 
-export interface QueryStateSnapshot {
-  [serializedKey: string]: unknown;
+export interface PersistedQueryClientState {
+  version: number;
+  dehydratedState: DehydratedState;
 }
