@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { AppView } from '@/design-system/components/primitives';
-import { Text } from '@/design-system/components/Text/Text';
-import { useTheme } from '@/design-system/theme/useTheme';
+import { AppView } from '@/presentation/components/primitives';
 import { createRepositoryStatsContainerStyle } from '@/presentation/components/repository/RepositoryStats.styles';
 import type { RepositoryStatsProps } from '@/presentation/components/repository/RepositoryStats.types';
+import { Text } from '@/presentation/components/text/Text';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 
 export function RepositoryStats({ starsLabel, language }: RepositoryStatsProps): React.JSX.Element {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <AppView style={createRepositoryStatsContainerStyle(theme)}>

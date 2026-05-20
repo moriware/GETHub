@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { Card } from '@/design-system/components/Card/Card';
-import { AppPressable, AppView } from '@/design-system/components/primitives';
-import { Text } from '@/design-system/components/Text/Text';
-import { useTheme } from '@/design-system/theme/useTheme';
-import { RepositoryStats } from '@/presentation/components/repository/RepositoryStats';
+import { Card } from '@/presentation/components/card/Card';
+import { AppPressable, AppView } from '@/presentation/components/primitives';
 import {
   createRepositoryCardContentStyle,
   createRepositoryCardStyle,
 } from '@/presentation/components/repository/RepositoryCard.styles';
 import type { RepositoryCardProps } from '@/presentation/components/repository/RepositoryCard.types';
+import { RepositoryStats } from '@/presentation/components/repository/RepositoryStats';
+import { Text } from '@/presentation/components/text/Text';
+import { useTheme } from '@/presentation/hooks/theme/useTheme';
 
 export function RepositoryCard({ repository, onPress }: RepositoryCardProps): React.JSX.Element {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <AppPressable onPress={onPress}>
