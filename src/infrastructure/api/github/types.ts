@@ -1,3 +1,9 @@
+export interface SearchRepositoriesParams {
+  q: string;
+  page?: number;
+  perPage?: number;
+}
+
 export interface GithubOwnerResponse {
   id: number;
   login: string;
