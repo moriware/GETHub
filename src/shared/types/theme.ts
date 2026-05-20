@@ -35,12 +35,18 @@ export interface ThemeTypographyTokens {
 }
 
 export interface ThemeSizeTokens {
-  iconSm: number;
-  iconMd: number;
-  iconLg: number;
-  avatarSm: number;
-  avatarMd: number;
-  avatarLg: number;
+  icon: {
+    sm: number;
+    md: number;
+    lg: number;
+  };
+  avatar: {
+    xs: number;
+    sm: number;
+    md: number;
+    lg: number;
+    xl: number;
+  };
 }
 
 export interface ThemeOpacityTokens {
