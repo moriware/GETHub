@@ -3,7 +3,6 @@ import { GetRepositoryDetailsUseCase } from '@/application/use-cases/repositorie
 import { SearchRepositoriesUseCase } from '@/application/use-cases/repositories/SearchRepositoriesUseCase';
 import { GithubIssuesApi } from '@/infrastructure/api/github/GithubIssuesApi';
 import { GithubRepositoryApi } from '@/infrastructure/api/github/GithubRepositoryApi';
-import { queryClient } from '@/infrastructure/cache/app-query-client/AppQueryClient';
 import { GithubHttpClient } from '@/infrastructure/http/github/GithubHttpClient';
 import { GithubIssueMapper } from '@/infrastructure/mappers/GithubIssueMapper';
 import { GithubRepositoryMapper } from '@/infrastructure/mappers/GithubRepositoryMapper';
@@ -23,7 +22,6 @@ const repositoryRepository = new GithubRepositoryRepository(
 const issueRepository = new GithubIssueRepository(issuesApi, new GithubIssueMapper());
 
 export const container = {
-  queryClient,
   mappers: {
     repository: new RepositoryToViewModelMapper(),
     issue: new IssueToViewModelMapper(),
