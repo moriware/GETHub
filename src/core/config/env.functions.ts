@@ -15,6 +15,7 @@ export function resolveExpoExtraConfig(): ExpoExtraConfig {
 export function buildAppEnv(extra: ExpoExtraConfig): AppEnv {
   return {
     githubToken: process.env.EXPO_PUBLIC_GITHUB_TOKEN ?? extra.githubToken ?? '',
-    githubBaseUrl: process.env.EXPO_PUBLIC_GITHUB_BASE_URL ?? extra.githubBaseUrl ?? 'https://api.github.com',
+    githubBaseUrl:
+      process.env.EXPO_PUBLIC_GITHUB_BASE_URL ?? extra.githubBaseUrl ?? 'https://api.github.com',
   };
 }
