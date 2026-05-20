@@ -1,74 +1,66 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
 
-import { useQueryClientContext } from '@/core/providers/query/QueryProvider';
 import { queryKeys } from '@/infrastructure/cache/app-query-client/AppQueryClient.constants';
-import { container } from '@/infrastructure/di/container';
-import type { IssuesState } from '@/presentation/hooks/issues/useRepositoryIssues.types';
-import type { IssueItemViewModel } from '@/presentation/view-models/issues/IssueItemViewModel';
+import {
+  canLoadRepositoryIssues,
+  fetchRepositoryIssuesPage,
+  flattenRepositoryIssuesPages,
+  resolveNextRepositoryIssuesPage,
+} from '@/presentation/hooks/issues/useRepositoryIssues.functions';
+import type { UseRepositoryIssuesResult } from '@/presentation/hooks/issues/useRepositoryIssues.types';
+import { resolveQueryErrorMessage } from '@/presentation/hooks/query/queryError.functions';
 import { INITIAL_PAGE } from '@/shared/constants/pagination';
 
-export function useRepositoryIssues(owner: string, repo: string) {
-  const { queryClient } = useQueryClientContext();
-  const [items, setItems] = useState<IssueItemViewModel[]>([]);
-  const [page, setPage] = useState(INITIAL_PAGE);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasNextPage, setHasNextPage] = useState(false);
+export function useRepositoryIssues(owner: string, repo: string): UseRepositoryIssuesResult {
+  const enabled = canLoadRepositoryIssues(owner, repo);
 
-  const loadPage = useCallback(
-    async (nextPage: number, append: boolean) => {
-      const key = queryKeys.repositories.issues(owner, `${repo}:${nextPage}`);
-      const cached = queryClient.getQueryData<IssuesState>(key);
-
-      if (cached) {
-        setItems((prev) => (append ? [...prev, ...cached.items] : cached.items));
-        setHasNextPage(cached.hasNextPage);
-        setPage(nextPage);
-        setError(null);
-        return;
-      }
-
-      setLoading(true);
-      const result = await container.useCases.getRepositoryIssues.execute(owner, repo, nextPage);
-      setLoading(false);
-
-      if (!result.ok) {
-        setError(result.error.message);
-        return;
-      }
-
-      const mappedItems = result.value.items.map((issue) =>
-        container.mappers.issue.toItemViewModel(issue),
-      );
-      const state: IssuesState = { items: mappedItems, hasNextPage: result.value.hasNextPage };
-      queryClient.setQueryData(key, state);
-
-      setItems((prev) => (append ? [...prev, ...mappedItems] : mappedItems));
-      setHasNextPage(result.value.hasNextPage);
-      setPage(nextPage);
-      setError(null);
+  const {
+    data,
+    error: queryError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isPending,
+    isRefetching,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: queryKeys.repositories.issues(owner, repo),
+    queryFn: async ({ pageParam }) => {
+      const page = typeof pageParam === 'number' ? pageParam : INITIAL_PAGE;
+      return fetchRepositoryIssuesPage(owner, repo, page);
     },
-    [owner, queryClient, repo],
-  );
+    initialPageParam: INITIAL_PAGE,
+    getNextPageParam: resolveNextRepositoryIssuesPage,
+    enabled,
+  });
 
-  useEffect(() => {
-    void loadPage(INITIAL_PAGE, false);
-  }, [loadPage]);
+  const items = useMemo(() => flattenRepositoryIssuesPages(data?.pages), [data?.pages]);
+  const error = enabled ? resolveQueryErrorMessage(queryError) : null;
+  const loading = enabled && (isPending || isFetchingNextPage || isRefetching);
 
-  const loadMore = useCallback(async () => {
-    if (loading || !hasNextPage) {
+  const loadMore = useCallback(async (): Promise<void> => {
+    if (!hasNextPage || isFetchingNextPage) {
       return;
     }
 
-    await loadPage(page + 1, true);
-  }, [hasNextPage, loadPage, loading, page]);
+    await fetchNextPage();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  const reload = useCallback(async (): Promise<void> => {
+    if (!enabled) {
+      return;
+    }
+
+    await refetch({ throwOnError: false });
+  }, [enabled, refetch]);
 
   return {
     items,
     loading,
     error,
-    hasNextPage,
+    hasNextPage: Boolean(hasNextPage),
     loadMore,
-    refetch: () => loadPage(INITIAL_PAGE, false),
+    refetch: reload,
   };
 }
