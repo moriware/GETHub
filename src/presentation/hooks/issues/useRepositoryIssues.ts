@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { queryKeys } from '@/infrastructure/cache/app-query-client/AppQueryClient.constants';
 import {
@@ -14,6 +14,7 @@ import { INITIAL_PAGE } from '@/shared/constants/pagination';
 
 export function useRepositoryIssues(owner: string, repo: string): UseRepositoryIssuesResult {
   const enabled = canLoadRepositoryIssues(owner, repo);
+  const [refreshing, setRefreshing] = useState(false);
 
   const {
     data,
@@ -55,12 +56,27 @@ export function useRepositoryIssues(owner: string, repo: string): UseRepositoryI
     await refetch({ throwOnError: false });
   }, [enabled, refetch]);
 
+  const refresh = useCallback(async (): Promise<void> => {
+    if (!enabled) {
+      return;
+    }
+
+    setRefreshing(true);
+    try {
+      await refetch({ throwOnError: false });
+    } finally {
+      setRefreshing(false);
+    }
+  }, [enabled, refetch]);
+
   return {
     items,
     loading,
+    refreshing,
     error,
     hasNextPage: Boolean(hasNextPage),
     loadMore,
+    refresh,
     refetch: reload,
   };
 }

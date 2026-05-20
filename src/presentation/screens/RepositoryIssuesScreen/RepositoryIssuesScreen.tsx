@@ -18,10 +18,8 @@ export function RepositoryIssuesScreen({
 }: RepositoryIssuesScreenProps): React.JSX.Element {
   const { theme } = useTheme();
   const styles = createRepositoryIssuesScreenStyles(theme);
-  const { items, loading, error, hasNextPage, loadMore, refetch } = useRepositoryIssues(
-    owner,
-    repo,
-  );
+  const { items, loading, refreshing, error, hasNextPage, loadMore, refresh, refetch } =
+    useRepositoryIssues(owner, repo);
 
   if (loading && items.length === 0) {
     return <LoadingState />;
@@ -54,6 +52,10 @@ export function RepositoryIssuesScreen({
         data={items}
         keyExtractor={(item) => String(item.id)}
         contentContainerStyle={styles.listContent}
+        onRefresh={() => {
+          void refresh();
+        }}
+        refreshing={refreshing}
         onEndReachedThreshold={UI_THRESHOLDS.listEndReached}
         onEndReached={() => {
           if (hasNextPage) {
