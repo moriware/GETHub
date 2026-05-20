@@ -1,4 +1,4 @@
-import type { RepositoryItemViewModel } from '@/presentation/view-models/RepositoryItemViewModel';
+import type { RepositoryItemViewModel } from '@/presentation/view-models/repositories/RepositoryItemViewModel';
 
 export interface SearchState {
   items: RepositoryItemViewModel[];

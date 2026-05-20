@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 
-import { useQueryClientContext } from '@/core/providers/QueryProvider';
-import { queryKeys } from '@/infrastructure/cache/queryKeys';
+import { useQueryClientContext } from '@/core/providers/query/QueryProvider';
+import { queryKeys } from '@/infrastructure/cache/app-query-client/AppQueryClient.constants';
 import { container } from '@/infrastructure/di/container';
 import type { SearchState } from '@/presentation/hooks/repositories/useSearchRepositories.types';
-import type { RepositoryItemViewModel } from '@/presentation/view-models/RepositoryItemViewModel';
+import type { RepositoryItemViewModel } from '@/presentation/view-models/repositories/RepositoryItemViewModel';
 import { INITIAL_PAGE } from '@/shared/constants/pagination';
 
 export function useSearchRepositories() {

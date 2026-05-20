@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useQueryClientContext } from '@/core/providers/QueryProvider';
-import { queryKeys } from '@/infrastructure/cache/queryKeys';
+import { useQueryClientContext } from '@/core/providers/query/QueryProvider';
+import { queryKeys } from '@/infrastructure/cache/app-query-client/AppQueryClient.constants';
 import { container } from '@/infrastructure/di/container';
 import type { IssuesState } from '@/presentation/hooks/issues/useRepositoryIssues.types';
-import type { IssueItemViewModel } from '@/presentation/view-models/IssueItemViewModel';
+import type { IssueItemViewModel } from '@/presentation/view-models/issues/IssueItemViewModel';
 import { INITIAL_PAGE } from '@/shared/constants/pagination';
 
 export function useRepositoryIssues(owner: string, repo: string) {

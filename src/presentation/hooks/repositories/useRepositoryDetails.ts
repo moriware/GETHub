@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useQueryClientContext } from '@/core/providers/QueryProvider';
+import { useQueryClientContext } from '@/core/providers/query/QueryProvider';
+import { queryKeys } from '@/infrastructure/cache/app-query-client/AppQueryClient.constants';
 import { container } from '@/infrastructure/di/container';
-import { queryKeys } from '@/infrastructure/cache/queryKeys';
-import type { RepositoryDetailsViewModel } from '@/presentation/view-models/RepositoryDetailsViewModel';
+import type { RepositoryDetailsViewModel } from '@/presentation/view-models/repositories/RepositoryDetailsViewModel';
 
 export function useRepositoryDetails(owner: string, repo: string) {
   const { queryClient } = useQueryClientContext();
