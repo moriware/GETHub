@@ -1,4 +1,7 @@
-import { type QueryKey, QueryStateSnapshot } from './types';
+import {
+  type QueryKey,
+  QueryStateSnapshot,
+} from '@/infrastructure/cache/app-query-client/AppQueryClient.types';
 
 class AppQueryClient {
   private readonly cache = new Map<string, unknown>();

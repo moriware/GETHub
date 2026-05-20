@@ -1,6 +1,7 @@
-import { queryClient } from '@/infrastructure/cache/queryClient';
-import { CACHE_KEY, storage } from './constants';
-import { QueryStateSnapshot } from './types';
+import { queryClient } from '@/infrastructure/cache/app-query-client/AppQueryClient';
+import { QueryStateSnapshot } from '@/infrastructure/cache/app-query-client/AppQueryClient.types';
+import { storage } from '../../storage/Storage.constants';
+import { CACHE_KEY } from './AppQueryClient.constants';
 
 export async function persistQueryClient(): Promise<void> {
   const snapshot = queryClient.dehydrate();

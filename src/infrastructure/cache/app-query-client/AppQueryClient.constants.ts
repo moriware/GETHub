@@ -1,3 +1,5 @@
+export const CACHE_KEY = 'query-cache';
+
 export const queryKeys = {
   repositories: {
     search: (query: string) => ['repositories', 'search', query] as const,

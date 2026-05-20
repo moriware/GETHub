@@ -1,4 +1,4 @@
-import type { ApiErrorPayload } from '@/shared/types/api';
+import { ApiErrorPayload } from '@/infrastructure/http/client/HttpClient.types';
 
 export class HttpClientError extends Error {
   public readonly payload: ApiErrorPayload;

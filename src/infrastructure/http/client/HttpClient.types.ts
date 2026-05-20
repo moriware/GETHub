@@ -9,6 +9,12 @@ export interface HttpRequest {
   signal?: AbortSignal;
 }
 
+export interface ApiErrorPayload {
+  status: number;
+  message: string;
+  details?: unknown;
+}
+
 export interface HttpClient {
   request<T>(request: HttpRequest): Promise<T>;
 }
