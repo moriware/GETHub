@@ -1,21 +1,21 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
 import { shouldPersistQueryCache } from '@/core/providers/query/QueryProvider.functions';
 import type { QueryProviderProps } from '@/core/providers/query/QueryProvider.types';
+import { queryClient } from '@/infrastructure/cache/app-query-client/AppQueryClient';
 import {
   persistQueryClient,
   restorePersistedQueryClient,
   setupQueryFocusManager,
   setupQueryOnlineManager,
 } from '@/infrastructure/cache/app-query-client/AppQueryClient.functions';
-import { queryClient } from '@/infrastructure/cache/app-query-client/AppQueryClient';
 
 export function QueryProvider({ children }: QueryProviderProps): React.JSX.Element {
   const [isHydrated, setIsHydrated] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setupQueryOnlineManager();
     const removeFocusListener = setupQueryFocusManager();
 
@@ -40,7 +40,7 @@ export function QueryProvider({ children }: QueryProviderProps): React.JSX.Eleme
     };
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextState) => {
       if (!shouldPersistQueryCache(nextState)) {
         return;

@@ -10,8 +10,12 @@ import { AppState, type AppStateStatus, Platform } from 'react-native';
 
 import { storage } from '@/infrastructure/storage/Storage.constants';
 
-import { CACHE_KEY, CACHE_VERSION, QUERY_DEFAULTS } from './AppQueryClient.constants';
-import type { PersistedQueryClientState } from './AppQueryClient.types';
+import {
+  CACHE_KEY,
+  CACHE_VERSION,
+  QUERY_DEFAULTS,
+} from '@/infrastructure/cache/app-query-client/AppQueryClient.constants';
+import type { PersistedQueryClientState } from '@/infrastructure/cache/app-query-client/AppQueryClient.types';
 
 let hasOnlineManagerBinding = false;
 
