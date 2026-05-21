@@ -1,56 +1,146 @@
-# Welcome to your Expo app 👋
+# GETHub
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicativo React Native (Expo) para buscar repositórios no GitHub, visualizar detalhes e listar issues abertas.
 
-## Get started
+## Documentação complementar
 
-1. Install dependencies
+- Arquitetura detalhada: [docs/architecture.md](docs/architecture.md)
+- Declaração de uso de IA: [docs/ai-usage.md](docs/ai-usage.md)
 
-   ```bash
-   npm install
-   ```
+## Stack principal
 
-2. Start the app
+- Expo SDK 55 + React Native 0.83
+- Expo Router (file-based routing)
+- TanStack React Query (cache, paginação e sincronização de dados)
+- Axios (cliente HTTP)
+- AsyncStorage (persistência do cache de queries)
+- Jest + Testing Library (testes unitários, integração e componentes)
 
-   ```bash
-   npx expo start
-   ```
+## Instalação e execução
 
-In the output, you'll find options to open the app in a
+### Pré-requisitos
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Node.js 20+
+- npm 10+
+- Expo CLI via `npx`
+- Android Studio (emulador Android) ou Xcode (simulador iOS, macOS)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1) Instalar dependências
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2) Configurar variáveis de ambiente (opcional, mas recomendado)
 
-### Other setup steps
+O app funciona sem token, porém pode atingir limite de rate do GitHub mais rapidamente.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```bash
+EXPO_PUBLIC_GITHUB_TOKEN=seu_token_aqui
+EXPO_PUBLIC_GITHUB_BASE_URL=https://api.github.com
+```
 
-## Learn more
+Você pode exportar no shell ou usar `.env` compatível com Expo.
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3) Rodar o projeto
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm run start
+```
 
-## Join the community
+Atalhos úteis:
 
-Join our community of developers creating universal apps.
+```bash
+npm run android
+npm run ios
+npm run web
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Scripts úteis
+
+```bash
+npm run lint
+npm run test
+npm run test:watch
+npm run test:coverage
+```
+
+### Rodar sem Expo Go
+
+Se você não quiser usar o Expo Go, é possível compilar uma build local do app e executá-la diretamente no Android ou iOS.
+
+Esse fluxo é útil para testar o app “como aplicativo nativo”, sem depender do cliente do Expo Go.
+
+#### Pré-requisitos adicionais
+
+- Android Studio configurado para Android, ou Xcode para iOS (macOS).
+- Ambiente nativo configurado para build local.
+
+#### Android
+
+Gera os arquivos nativos e executa o app localmente no emulador ou dispositivo conectado:
+
+```bash
+npx expo prebuild --clean
+npx expo run:android
+```
+
+#### iOS
+
+No macOS, você pode gerar os arquivos nativos e rodar no simulador com:
+
+```bash
+npx expo prebuild --clean
+npx expo run:ios
+```
+
+#### Observações
+
+- Esse fluxo não exige Expo Go.
+- As pastas `android/` e `ios/` podem ser geradas automaticamente pelo `prebuild`.
+- Se o projeto passar a depender de configurações nativas, pode ser necessário repetir o `prebuild` após mudanças relevantes.
+
+## Decisões arquiteturais
+
+### Por que Clean Architecture?
+
+O projeto foi estruturado para separar claramente regras de negócio de framework, UI e integrações externas.  
+Isso permite:
+
+- evoluir UI e infraestrutura com menor impacto no domínio;
+- testar use cases em isolamento;
+- trocar implementação de API/cache/storage com menor acoplamento.
+
+### Como está aplicado
+
+- `domain`: entidades, contratos e regras puras.
+- `application`: casos de uso e serviços de aplicação.
+- `infrastructure`: HTTP, APIs, repositórios concretos, mappers, DI e cache.
+- `presentation`: telas, hooks e componentes.
+- `core`/`app`: providers, navegação e entrada do Expo Router.
+
+Detalhes completos em: [docs/architecture.md](docs/architecture.md)
+
+### Trade-offs assumidos
+
+- Mais arquivos/boilerplate para recursos simples.
+- Curva de aprendizado maior para onboarding inicial.
+- Ganho de manutenção no médio/longo prazo, principalmente em testes e evolução de features.
+
+## Declaração de uso de IA
+
+Resumo objetivo:
+
+- Gerado com apoio de IA: parte de estrutura inicial de rotas, sugestões de organização de camadas, revisão de testes, sugestões de textos e ajustes repetitivos.
+- Adaptado manualmente: integração real com React Query, ajustes de arquitetura ao contexto do app, decisões de tema/navegação, refinamento de hooks e contratos.
+- Rejeitado: sugestões que aumentavam acoplamento ou fugiam da organização definida (especialmente em pontos sensíveis como DI e fronteiras entre camadas).
+
+Versão completa e detalhada em: [docs/ai-usage.md](docs/ai-usage.md)
+
+## O que eu faria diferente com mais tempo
+
+- Adicionaria testes E2E (ex.: Detox) para fluxos principais.
+- Criaria contratos de erro mais ricos (tipos de erro por cenário/API).
+- Melhoraria observabilidade (logs estruturados e tracing de falhas de rede/cache).
+- Evoluiria acessibilidade e internacionalização para além do português.
+- Adicionaria CI com gates de cobertura mínima por camada.
