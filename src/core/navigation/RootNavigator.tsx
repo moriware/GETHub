@@ -1,9 +1,4 @@
-import {
-  createHeaderShortcutStyle,
-  shouldShowDesignSystemShortcut,
-} from '@/core/navigation/RootNavigator.functions';
-import { AppPressable } from '@/presentation/components/primitives';
-import { Text } from '@/presentation/components/text/Text';
+import { DesignButton } from '@/presentation/components/design-button/DesignButton';
 import { useTheme } from '@/presentation/hooks/theme/useTheme';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
@@ -14,27 +9,27 @@ export function RootNavigator(): React.JSX.Element {
 
   return (
     <Stack
-      screenOptions={({ route }) => ({
+      screenOptions={{
         headerTitleAlign: 'left',
         contentStyle: { backgroundColor: theme.colors.background },
         headerStyle: { backgroundColor: theme.colors.headerBackground },
         headerTintColor: theme.colors.text,
         headerTitleStyle: { fontWeight: 'bold' },
-        headerRight: shouldShowDesignSystemShortcut(route.name)
-          ? () => (
-              <AppPressable
-                onPress={() => {
-                  router.push('/explore');
-                }}
-                style={({ pressed }) => createHeaderShortcutStyle(theme, pressed)}>
-                <Text tone="primary" variant="label">
-                  Design
-                </Text>
-              </AppPressable>
-            )
-          : undefined,
-      })}>
-      <Stack.Screen name="index" options={{ title: 'Repositories' }} />
+      }}>
+      <Stack.Screen
+        name="index"
+        options={{
+          title: 'Repositories',
+          headerRight: () => (
+            <DesignButton
+              theme={theme}
+              onPress={() => {
+                router.push('/explore');
+              }}
+            />
+          ),
+        }}
+      />
       <Stack.Screen name="repository/[owner]/[name]" options={{ title: 'Details' }} />
       <Stack.Screen name="repository/[owner]/[name]/issues" options={{ title: 'Issues' }} />
       <Stack.Screen name="explore" options={{ title: 'Design System' }} />
