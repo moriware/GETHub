@@ -65,6 +65,41 @@ npm run test:watch
 npm run test:coverage
 ```
 
+### Rodar sem Expo Go
+
+Se você não quiser usar o Expo Go, é possível compilar uma build local do app e executá-la diretamente no Android ou iOS.
+
+Esse fluxo é útil para testar o app “como aplicativo nativo”, sem depender do cliente do Expo Go.
+
+#### Pré-requisitos adicionais
+
+- Android Studio configurado para Android, ou Xcode para iOS (macOS).
+- Ambiente nativo configurado para build local.
+
+#### Android
+
+Gera os arquivos nativos e executa o app localmente no emulador ou dispositivo conectado:
+
+```bash
+npx expo prebuild --clean
+npx expo run:android
+```
+
+#### iOS
+
+No macOS, você pode gerar os arquivos nativos e rodar no simulador com:
+
+```bash
+npx expo prebuild --clean
+npx expo run:ios
+```
+
+#### Observações
+
+- Esse fluxo não exige Expo Go.
+- As pastas `android/` e `ios/` podem ser geradas automaticamente pelo `prebuild`.
+- Se o projeto passar a depender de configurações nativas, pode ser necessário repetir o `prebuild` após mudanças relevantes.
+
 ## Decisões arquiteturais
 
 ### Por que Clean Architecture?
